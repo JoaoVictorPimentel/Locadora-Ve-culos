@@ -15,12 +15,23 @@ import './bootstrap';
 
 const app = createApp({});
 
+import CardComponent from './components/Card.vue';
 import ExampleComponent from './components/ExampleComponent.vue';
-import HomeComponent from './components/home.vue';
-import LoginComponent from './components/login.vue';
+import HomeComponent from './components/home/Home.vue';
+import InputComponent from './components/InputContainer.vue';
+import LoginComponent from './components/login/Login.vue';
+import MarcasComponent from './components/marcas/Marcas.vue';
+import ModalComponent from './components/Modal.vue';
+import TableComponent from './components/Table.vue';
 app.component('example-component', ExampleComponent);
+app.component('marcas-component', MarcasComponent);
+app.component('modal-component', ModalComponent);
 app.component('login-component', LoginComponent);
 app.component('home-component', HomeComponent);
+app.component('home-component', HomeComponent);
+app.component('table-component', TableComponent);
+app.component('card-component', CardComponent);
+app.component('input-container-component', InputComponent);
 
 /**
  * The following block of code may be used to automatically register your

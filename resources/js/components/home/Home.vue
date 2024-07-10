@@ -4,7 +4,6 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">Bem-vindo</div>
-
                 <div class="card-body">
                     <p>Apresentar indicadores do sistema</p>
                 </div>
@@ -15,5 +14,7 @@
 </template>
 
 <script>
-
+    export default {
+        
+    }
 </script>

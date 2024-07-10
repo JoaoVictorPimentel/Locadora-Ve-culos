@@ -49,7 +49,7 @@
 
                                     <a class="btn btn-link" href="">
                                         Esqueci a senha
-                                     </a>
+                                    </a>
                                 </div>
                             </div>
                         </form>
