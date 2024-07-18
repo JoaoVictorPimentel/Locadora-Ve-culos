@@ -6,6 +6,7 @@ use App\Models\Modelo;
 use App\Repositories\ModeloRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\StoreModeloRequest;
 
 class ModeloController extends Controller
 {
@@ -45,24 +46,26 @@ class ModeloController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreModeloRequest $request)
     {
-        $request->validate($this->modelo->rules());
-
-        $imagem = $request->file('imagem');
-        $imagem_urn = $imagem->store('imagens/modelos', 'public');
-        
-        $modelo = $this->modelo->create([
-            'marca_id' => $request->marca_id,
-            'nome' => $request->nome,
-            'imagem' => $imagem_urn,
-            'numero_portas' => $request->numero_portas,
-            'lugares' => $request->lugares,
-            'air_bag' => $request->air_bag,
-            'abs' => $request->abs,
-        ]);
-
-        return response()->json($modelo, 200);
+        try {
+            $imagem = $request->file('imagem');
+            $imagem_urn = $imagem->store('imagens/modelos', 'public');
+            
+            $modelo = $this->modelo->create([
+                'marca_id' => $request->marca_id,
+                'nome' => $request->nome,
+                'imagem' => $imagem_urn,
+                'numero_portas' => $request->numero_portas,
+                'lugares' => $request->lugares,
+                'air_bag' => $request->air_bag,
+                'abs' => $request->abs,
+            ]);
+    
+            return response()->json($modelo, 200);
+        } catch (Execption $e) {
+            return response()->json(['msg' => 'Erro ao cadastrar modelo!']);
+        }
     }
 
     /**

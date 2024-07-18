@@ -11,7 +11,7 @@ class StoreClienteRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,14 @@ class StoreClienteRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'nome' => 'required|min:3'
+        ];
+    }
+
+    public function messages() {
+        return [
+            'required' => 'O campo :attribute é obrigatório!',
+            'nome.min' => 'O nome precisa ter no mínimo 3 caracteres'
         ];
     }
 }

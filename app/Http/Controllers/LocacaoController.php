@@ -39,22 +39,25 @@ class LocacaoController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreLocacaoRequest $request)
     {
-        $request->validate($this->locacao->rules());
+        try {
+            $locacao = $this->locacao->create([
+                'cliente_id' => $request->cliente_id,
+                'carro_id' => $request->carro_id,
+                'data_inicio_periodo' => $request->data_inicio_periodo,
+                'data_final_previsto_periodo' => $request->data_final_previsto_periodo,
+                'data_final_realizado_periodo' => $request->data_final_realizado_periodo,
+                'valor_diaria' => $request->valor_diaria,
+                'km_inicial' => $request->km_inicial,
+                'km_final' => $request->km_final
+            ]);
+    
+            return response()->json($locacao, 201);
+        } catch (Exception $e) {
+            return response()->json(['msg' => 'Erro ao cadastar nova locação!']);
+        }
 
-        $locacao = $this->locacao->create([
-            'cliente_id' => $request->cliente_id,
-            'carro_id' => $request->carro_id,
-            'data_inicio_periodo' => $request->data_inicio_periodo,
-            'data_final_previsto_periodo' => $request->data_final_previsto_periodo,
-            'data_final_realizado_periodo' => $request->data_final_realizado_periodo,
-            'valor_diaria' => $request->valor_diaria,
-            'km_inicial' => $request->km_inicial,
-            'km_final' => $request->km_final
-        ]);
-
-        return response()->json($locacao, 201);
     }
 
     /**

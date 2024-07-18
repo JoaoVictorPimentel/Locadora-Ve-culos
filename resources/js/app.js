@@ -15,6 +15,7 @@ import './bootstrap';
 
 const app = createApp({});
 
+import AlertComponent from './components/Alert.vue';
 import CardComponent from './components/Card.vue';
 import ExampleComponent from './components/ExampleComponent.vue';
 import HomeComponent from './components/home/Home.vue';
@@ -27,6 +28,7 @@ app.component('example-component', ExampleComponent);
 app.component('marcas-component', MarcasComponent);
 app.component('modal-component', ModalComponent);
 app.component('login-component', LoginComponent);
+app.component('alert-component', AlertComponent);
 app.component('home-component', HomeComponent);
 app.component('home-component', HomeComponent);
 app.component('table-component', TableComponent);

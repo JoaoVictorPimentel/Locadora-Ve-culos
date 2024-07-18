@@ -11,7 +11,7 @@ class StoreCarroRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,17 @@ class StoreCarroRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'modelo_id' => 'exists:modelos,id',
+            'placa' => 'required',
+            'disponivel' => 'required',
+            'km' => 'required'
+        ];
+    }
+
+    public function messages() {
+        return [
+            'exists' => 'O modelo já está cadastrado!',
+            'required' => 'O campo :attribute obrigatório!'
         ];
     }
 }

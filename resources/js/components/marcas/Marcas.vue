@@ -16,7 +16,7 @@
                             </div>
                             <div class="col mb-3">
                                 <input-container-component titulo="Nome da marca" id="inputNome" id-help="nomeHelp"
-                                    texto-ajuda="Opcional. Informe o I=nome da marca!">
+                                    texto-ajuda="Opcional. Informe o nome da marca!">
                                     <input type="text" class="form-control" id="inputNome" aria-describedby="nomeHelp"
                                         placeholder="Nome da marca">
                                 </input-container-component>
@@ -32,18 +32,31 @@
                 <card-component titulo="Relação de marcas">
                     <!-- Conteudo -->
                     <template v-slot:conteudo>
-                        <table-component></table-component>
+                        <table-component v-if="marcas.data"
+                            :dados="marcas.data"
+                            :titulos=" {
+                                id: {titulo: 'ID', tipo:'texto'},
+                                nome: {titulo: 'Nome', tipo:'texto'},
+                                imagem: {titulo: 'Imagem', tipo:'imagem'},
+                                created_at: {titulo: 'Criação', tipo:'data'}
+                            }">
+                        </table-component>
                     </template>
                     <!-- Rodape -->
                     <template v-slot:rodape>
                         <button type="button" class="btn btn-primary btn-sm float-right" data-bs-toggle="modal"
-                            data-bs-target="#modalMarca">Adicionar</button>
+                            data-bs-target="#modalMarca" @click.prevent="limparCampos">Adicionar</button>
                     </template>
                 </card-component>
             </div>
         </div>
 
+        <!-- Modal para adicionar nova marca -->
         <modal-component id="modalMarca" titulo="Adicionar marca">
+            <template v-slot:alertas>
+                <alert-component tipo="success" :detalhes="transicaoDetalhes" titulo="Cadastro realizado com sucesso!" v-if="transicaoStatus == 'adicionado'"></alert-component>
+                <alert-component tipo="danger" :detalhes="transicaoDetalhes" titulo="Erro ao tentar cadastrar" v-if="transicaoStatus == 'erro'"></alert-component>
+            </template>
             <template v-slot:conteudo>
                 <div class="form-group mb-3">
                     <input-container-component titulo="Nome da marca" id="novoNome" id-help="novoNomeHelp" texto-ajuda="Informe o ID da marca!">
@@ -76,17 +89,51 @@
 
 <script>
     export default {
+        computed: {
+            token() {
+                let token = document.cookie.split(';').find(indice => {
+                    return indice.includes('token=')
+                })
+                
+                token = token.split('=')[1]
+                token = 'Bearer' + token  
+                
+                return token
+            }
+        },
         data() {
             return {
                 urlBase: 'http://localhost:8000/api/v1/marca',
                 nomeMarca: '',
-                arquivoImagem: []
+                arquivoImagem: [],
+                transicaoStatus: '',
+                transicaoDetalhes: {},
+                marcas: []
             }
         },
-        methods: {
+        methods: {  
+            carregarLista() {
+                let config = {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Authorization': this.token
+                    }
+                }
+
+                axios.get(this.urlBase, config)
+                    .then(response => {
+                        this.marcas = response.data
+                        console.log(this.marcas)
+                    })
+                    .catch(errors => {
+                        console.log(errors)
+                    })
+            },
+
             carregarImagem(e) {
                 this.arquivoImagem = e.target.files
             },
+
             salvar() {
                 console.log(this.nomeMarca, this.arquivoImagem[0])
 
@@ -97,18 +144,38 @@
                 let config = {
                     headers: {
                         'Content-Type': 'multipart/form-data',
-                        'Accept': 'application/json'
+                        'Accept': 'application/json',
+                        'Authorization': this.token
                     }
                 }
 
                 axios.post(this.urlBase, formData, config)
                     .then(response => {
-                        console.log(response)
+                        this.transicaoStatus = 'adicionado'
+                        this.transicaoDetalhes = {
+                            mensagem: 'ID do registro:' + response.data.id
+                        }
+                        //console.log(response)
                     })
                     .catch(errors => {
-                        console.log(errors)
+                        this.transicaoStatus = 'erro'
+                        this.transicaoDetalhes = {
+                            mensagem: errors.response.data.message,
+                            listarErros: errors.response.data.errors
+                        }
+                        //console.log(errors.response.data.message)
                     })
-            }
+            }, 
+
+            limparCampos() {
+                this.transicaoStatus = ''
+                this.transicaoDetalhes = {}
+                this.$store.state.transacao.status = ''
+                this.$store.state.transacao.mensagem = ''
+            },
+        },
+        mounted() {
+            this.carregarLista()
         }
     }
 </script>

@@ -6,7 +6,7 @@ use App\Models\Cliente;
 use App\Repositories\ClienteRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-
+use App\Http\Requests\StoreClienteRequest;
 
 class ClienteController extends Controller
 {
@@ -36,15 +36,17 @@ class ClienteController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreClienteRequest $request)
     {
-        $request->validate($this->cliente->rules());
+        try {
+            $cliente = $this->cliente->create([
+                'nome' => $request->nome
+            ]);
 
-        $cliente = $this->cliente->create([
-            'nome' => $request->nome
-        ]);
-
-        return response()->json($cliente, 201);
+            return response()->json($cliente, 201);
+        } catch(Execption $e) {
+            return response()->json(['msg' => 'Erro ao cadastar cliente!']);
+        }
     }
 
     /**

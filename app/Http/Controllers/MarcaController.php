@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\Marca;
 use Illuminate\Http\Request;
 use App\Repositories\MarcaRepository;
+use App\Http\Requests\StoreMarcaRequest;
+
 
 class MarcaController extends Controller
 {
@@ -37,7 +39,7 @@ class MarcaController extends Controller
             $marcaRepository->selectAtributos($request->atributos);
         } 
 
-        return response()->json($marcaRepository->getResultado(), 200);
+        return response()->json($marcaRepository->getResultadoPaginado(3), 200);
     }
 
     /**
@@ -56,19 +58,23 @@ class MarcaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreMarcaRequest $request)
     {
-        $request->validate($this->marca->rules(), $this->marca->feedback());
+        try{ 
+            $imagem = $request->file('imagem');
+            $imagem_urn = $imagem->store('imagens', 'public');
+    
+            $marca = $this->marca->create([
+                'nome' => $request->nome,
+                'imagem' => $imagem_urn
+            ]);
+    
+            return response()->json($marca, 201);
 
-        $imagem = $request->file('imagem');
-        $imagem_urn = $imagem->store('imagens', 'public');
+        } catch(Exception $e) {
+            return response()->json(['msg'=>'Erro ao cadastar marca!']);
+        }
 
-        $marca = $this->marca->create([
-            'nome' => $request->nome,
-            'imagem' => $imagem_urn
-        ]);
-
-        return response()->json($marca, 201);
     }
 
     /**

@@ -6,6 +6,7 @@ use App\Models\Carro;
 use App\Repositories\CarroRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\StoreCarroRequest;
 
 class CarroController extends Controller
 {
@@ -44,18 +45,21 @@ class CarroController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreCarroRequest $request)
     {
-        $request->validate($this->carro->rules());
+        try {
+            $carro = $this->carro->create([
+                'modelo_id' => $request->modelo_id,
+                'placa' => $request->placa,
+                'disponivel' => $request->disponivel,
+                'km' => $request->km
+            ]);
+    
+            return response()->json($carro, 201);
+        } catch (Execption $e) {
+            return response()->json(['msg' => 'Erro ao cadastar carro!']);
+        }
 
-        $carro = $this->carro->create([
-            'modelo_id' => $request->modelo_id,
-            'placa' => $request->placa,
-            'disponivel' => $request->disponivel,
-            'km' => $request->km
-        ]);
-
-        return response()->json($carro, 201);
     }
 
     /**

@@ -20,8 +20,4 @@ class Locacao extends Model
         'km_inicial',
         'km_final'
     ];
-
-    public function rules() {
-        return [];
-    }
 }
