@@ -5,7 +5,16 @@
  */
 
 import { createApp } from 'vue';
+import { createStore } from 'vuex';
 import './bootstrap';
+
+const store = createStore({
+    state() {
+        return {
+            teste: 'teste aaaaaaaaaaa'
+        };
+    }
+});
 
 /**
  * Next, we will create a fresh Vue application instance. You may then begin
@@ -56,3 +65,5 @@ app.component('input-container-component', InputComponent);
  */
 
 app.mount('#app');
+app.use(store)
+
