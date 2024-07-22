@@ -11,7 +11,8 @@ import './bootstrap';
 const store = createStore({
     state() {
         return {
-            item: {}
+            item: {},
+            transacao: { status: '', mensagem: '' }
         };
     }
 });
@@ -63,6 +64,5 @@ app.component('input-container-component', InputComponent);
  * scaffolding. Otherwise, you will need to add an element yourself.
  */
 
-app.mount('#app');
 app.use(store)
-
+app.mount('#app');
