@@ -32,7 +32,12 @@
                 <card-component titulo="Relação de marcas">
                     <!-- Conteudo -->
                     <template v-slot:conteudo>
-                        <table-component v-if="marcas.data" :dados="marcas.data" :titulos="{
+                        <table-component v-if="marcas.data" 
+                            :dados="marcas.data" 
+                            :visualizar="{ visivel:true, dataToggle: 'modal', dataTarget:'#modalMarcaVisualizar'}"
+                            :atualizar="true"
+                            :remover="true"
+                            :titulos="{
                             id: { titulo: 'ID', tipo: 'texto' },
                             nome: { titulo: 'Nome', tipo: 'texto' },
                             imagem: { titulo: 'Imagem', tipo: 'imagem' },
@@ -87,6 +92,21 @@
             <template v-slot:rodape>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
                 <button type="button" class="btn btn-primary" @click="salvar">Salvar</button>
+            </template>
+        </modal-component>
+
+        <!-- Modal de visualizar marca -->
+        <modal-component id="modalMarcaVisualizar" titulo="Visualizar Marca">
+            <template v-slot:alertas>
+                
+            </template>
+            
+            <template v-slot:conteudo>
+                teste
+            </template>
+            
+            <template v-slot:rodape>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Fechar</button>
             </template>
         </modal-component>
     </div>
