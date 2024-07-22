@@ -11,7 +11,7 @@ import './bootstrap';
 const store = createStore({
     state() {
         return {
-            teste: 'teste aaaaaaaaaaa'
+            item: {}
         };
     }
 });
@@ -40,7 +40,6 @@ app.component('marcas-component', MarcasComponent);
 app.component('modal-component', ModalComponent);
 app.component('login-component', LoginComponent);
 app.component('alert-component', AlertComponent);
-app.component('home-component', HomeComponent);
 app.component('home-component', HomeComponent);
 app.component('table-component', TableComponent);
 app.component('card-component', CardComponent);
