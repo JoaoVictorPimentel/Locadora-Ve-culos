@@ -16,7 +16,7 @@
                             {{ valor }}
                         </span>
                         <span v-if="titulos[chaveValor].tipo == 'data'">
-                            {{ '...'+valor }}
+                            {{ formataDataTempo(valor) }}
                         </span>
                         <span v-if="titulos[chaveValor].tipo == 'imagem'">
                             <img :src="'/storage/'+valor" width="40" height="40">
@@ -44,6 +44,24 @@ export default {
             this.$store.state.transacao.status = ''
             this.$store.state.transacao.mensagem = ''
             this.$store.state.transacao.dados = ''
+        },
+
+        formataDataTempo(data) {
+            if(!data) return ''
+
+            data = data.split('T')
+
+            let dataFormatada = data[0]
+            dataFormatada = dataFormatada.split('-')
+            dataFormatada = dataFormatada[2] + '/' + dataFormatada[1] + '/' + dataFormatada[0]
+
+            let horaFormatada = data[1]
+            horaFormatada = horaFormatada.split('.')
+            horaFormatada = horaFormatada[0]
+
+            let dataFinal = dataFormatada + ' ' + horaFormatada
+
+            return dataFinal
         }
     },
 
